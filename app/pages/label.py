@@ -5,7 +5,7 @@ from streamlit_labelstudio import st_labelstudio
 def app():
     st.markdown(
         """
-    ### Тут разметка ебать
+    ### Тут разметка
     Какой-то крутой экстеньшен
     """
     )
