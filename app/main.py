@@ -28,8 +28,8 @@ def main():
     )
     pages = [
         Page('# Главная страница', head_app),
-        Page('# Датасеты', dataset_app),
         Page('# Проекты', project_app),
+        Page('# Датасеты', dataset_app),
         Page('# Разметка', label_app),
         Page('# Обучение', train_app),
         Page('# Предсказание', inference_app),
