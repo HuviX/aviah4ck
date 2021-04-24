@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+import SessionState
 import streamlit as st
 
 from app.pages import (
@@ -15,6 +16,9 @@ from app.pages import (
 TITLE = 'Кабанчики-ML'
 LOGO_URL = 'img/logo.png'
 LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
+
+
+session_state = SessionState.get(page=None)
 
 
 def main():
@@ -37,7 +41,8 @@ def main():
     ]
     for page in pages:
         if st.sidebar.button(page['name']):
-            render_page(page)
+            session_state.page = page
+    render_page(session_state.page or pages[0])
 
     st.sidebar.markdown('<hr>', unsafe_allow_html=True)
     st.sidebar.image(LOGO_AVIAHACK_URL)
