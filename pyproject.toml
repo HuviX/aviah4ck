@@ -8,6 +8,7 @@ authors = ["Кабанчики <kabanchiki@mai.ru>"]
 python = "^3.7"
 streamlit = "^0.80.0"
 streamlit-drawable-canvas = "^0.6.0"
+streamlit-labelstudio = "^0.0.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"

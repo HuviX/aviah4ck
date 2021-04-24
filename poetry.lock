@@ -1067,6 +1067,17 @@ Pillow = "*"
 streamlit = ">=0.63"
 
 [[package]]
+name = "streamlit-labelstudio"
+version = "0.0.3"
+description = "A Streamlit component that provides an annotation interface using the LabelStudio Frontend"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+streamlit = ">=0.63"
+
+[[package]]
 name = "terminado"
 version = "0.9.4"
 description = "Tornado websocket backend for the Xterm.js Javascript terminal emulator library."
@@ -1266,7 +1277,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "fd51da6cc0d1aef849e29f4154bf83710b5e1b64d2aefe9765d903351c813cfc"
+content-hash = "662788292a8111f1674ae0747e9c393f7a7448d4d2d91c96d720de31df8dd2f4"
 
 [metadata.files]
 altair = [
@@ -1932,6 +1943,10 @@ streamlit = [
 streamlit-drawable-canvas = [
     {file = "streamlit-drawable-canvas-0.6.0.tar.gz", hash = "sha256:77337d3c923c29d97028455c22c79af2754fb9dbf2e0a2014d85e014fe1772db"},
     {file = "streamlit_drawable_canvas-0.6.0-py3-none-any.whl", hash = "sha256:a0f6d2732b6fb8b76c9e1223a1ea9ffa87c8ade680c309409c2ba831eaf82f3b"},
+]
+streamlit-labelstudio = [
+    {file = "streamlit-labelstudio-0.0.3.tar.gz", hash = "sha256:c65a3effd45456fcc9e8c183981e482da897399dec28cfcd8c375db161b12799"},
+    {file = "streamlit_labelstudio-0.0.3-py3-none-any.whl", hash = "sha256:25851b02a217793d2dc46709271ec9d056600b05463d012060f99c66f762dd7d"},
 ]
 terminado = [
     {file = "terminado-0.9.4-py3-none-any.whl", hash = "sha256:daed77f9fad7b32558fa84b226a76f45a02242c20813502f36c4e1ade6d8f1ad"},
