@@ -9,6 +9,8 @@ services:
       network: host
     ports:
       - 8501:8501
+    environment:
+      - DB_URL: "postgresql://postgres:postgres@db:5432/postgres"
     depends_on:
       - db
 
