@@ -11,6 +11,11 @@ from app.state import session_state
 
 
 def app():
+    st.markdown(
+        """
+    *Проект - это конкретная задача, которая потребует множество экспериментов с данными и моделями*
+    """
+    )
     pages = [
         Page('## Просмотр проектов', show_projects),
         Page('## Создать новый проект', create_new_project),
