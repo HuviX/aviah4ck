@@ -11,6 +11,7 @@ streamlit-labelstudio = "^0.0.3"
 SQLAlchemy = "^1.4.11"
 SQLAlchemy-Utils = "^0.37.0"
 pydantic = "^1.8.1"
+psycopg2-binary = "^2.8.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
