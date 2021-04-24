@@ -10,6 +10,7 @@ streamlit = "^0.80.0"
 streamlit-drawable-canvas = "^0.6.0"
 streamlit-labelstudio = "^0.0.3"
 SQLAlchemy = "^1.4.11"
+SQLAlchemy-Utils = "^0.37.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
