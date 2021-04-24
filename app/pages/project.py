@@ -1,12 +1,14 @@
 import streamlit as st
 
+from app.pages.utils import Page, render_horizontal_pages
+
 
 def app():
-    if st.button('Создать новый проект'):
-        create_new_project()
-
-    if st.button('Просмотр проектов'):
-        show_projects()
+    pages = [
+        Page('## Создать новый проект', create_new_project),
+        Page('## Просмотр проектов', show_projects),
+    ]
+    render_horizontal_pages(pages)
 
 
 def create_new_project():

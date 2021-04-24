@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 import SessionState
 import streamlit as st
 
@@ -12,6 +10,7 @@ from app.pages import (
     project_app,
     train_app,
 )
+from app.pages.utils import Page, render_sidebar_pages
 
 TITLE = 'Кабанчики-ML'
 LOGO_URL = 'img/logo.png'
@@ -30,19 +29,16 @@ def main():
         """
     )
     pages = [
-        {'name': 'Главная страница', 'app': head_app},
-        {'name': 'Датасеты', 'app': dataset_app},
-        {'name': 'Проекты', 'app': project_app},
-        {'name': 'Разметка', 'app': label_app},
-        {'name': 'Обучение', 'app': train_app},
-        {'name': 'Предсказание', 'app': inference_app},
-        {'name': 'Об инструменте', 'app': about_app},
-        {'name': 'Описание задачи', 'app': lambda: st.markdown(get_readme())},
+        Page('# Главная страница', head_app),
+        Page('# Датасеты', dataset_app),
+        Page('# Проекты', project_app),
+        Page('# Разметка', label_app),
+        Page('# Обучение', train_app),
+        Page('# Предсказание', inference_app),
+        Page('# Об инструменте', about_app),
+        Page('# Описание задачи', lambda: st.markdown(get_readme())),
     ]
-    for page in pages:
-        if st.sidebar.button(page['name']):
-            session_state.page = page
-    render_page(session_state.page or pages[0])
+    render_sidebar_pages(pages, session_state=session_state)
 
     st.sidebar.markdown('<hr>', unsafe_allow_html=True)
     st.sidebar.image(LOGO_AVIAHACK_URL)
@@ -52,11 +48,6 @@ def get_readme():
     with open('README.md') as f:
         text = f.read()
     return text
-
-
-def render_page(page: Dict[str, Any]):
-    st.title(page['name'])
-    page['app']()
 
 
 if __name__ == '__main__':

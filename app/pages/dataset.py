@@ -1,15 +1,15 @@
 import streamlit as st
 
+from app.pages.utils import Page, render_horizontal_pages
+
 
 def app():
-    if st.button('Создать новый датасет'):
-        create_new_dataset()
-
-    if st.button('Добавить данные в существующий датасет'):
-        add_or_remove_examples()
-
-    if st.button('Просмотр датасетов'):
-        show_datasets()
+    pages = [
+        Page('## Создать новый датасет', create_new_dataset),
+        Page('## Добавить данные в существующий датасет', add_or_remove_examples),
+        Page('## Просмотр датасетов', show_datasets),
+    ]
+    render_horizontal_pages(pages)
 
 
 def create_new_dataset():
