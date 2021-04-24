@@ -1,15 +1,7 @@
 import streamlit as st
 
 from app.db.settings import DBSettings
-from app.pages import (
-    about_app,
-    dataset_app,
-    head_app,
-    inference_app,
-    label_app,
-    project_app,
-    train_app,
-)
+from app.pages import dataset_app, head_app, inference_app, label_app, project_app, train_app
 from app.pages.utils import Page, render_sidebar_pages
 from app.state import session_state
 
@@ -26,6 +18,7 @@ def main():
             [![Star](https://img.shields.io/github/stars/HuviX/aviah4ck.svg?logo=github&style=social)](https://gitHub.com/HuviX/aviah4ck)
         """
     )
+    st.sidebar.markdown('<br>', unsafe_allow_html=True)
     pages = [
         Page('# Главная страница', head_app),
         Page('# Проекты', project_app),
@@ -33,10 +26,10 @@ def main():
         Page('# Разметка', label_app),
         Page('# Обучение', train_app),
         Page('# Предсказание', inference_app),
-        Page('# Об инструменте', about_app),
         Page('# Описание задачи', lambda: st.markdown(get_readme())),
     ]
     render_sidebar_pages(pages, session_state=session_state)
+    st.sidebar.markdown('<br>', unsafe_allow_html=True)
 
     st.sidebar.markdown('<hr>', unsafe_allow_html=True)
     st.sidebar.image(LOGO_AVIAHACK_URL)
