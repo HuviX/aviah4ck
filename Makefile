@@ -1,6 +1,18 @@
+PYTHON ?= python
+VENV = .venv
+
 CODE = app
 
 .PHONY: pretty lint
+
+init:
+	$(PYTHON) -m venv $(VENV)
+	$(VENV)/bin/python -m pip install --upgrade pip
+	$(VENV)/bin/python -m pip install poetry
+	$(VENV)/bin/poetry install -v
+
+run:
+	PYTHONPATH=. $(VENV)/bin/python -m streamlit run app/main.py
 
 lint:
 	black --target-version py36 --check --skip-string-normalization $(CODE)
