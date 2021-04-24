@@ -262,3 +262,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# fsdata storage
+data/
