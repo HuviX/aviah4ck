@@ -1,6 +1,7 @@
 import streamlit as st
 
 from app.pages.utils import Page, render_horizontal_pages
+from app.state import session_state
 
 
 def app():
@@ -8,7 +9,7 @@ def app():
         Page('## Создать новый проект', create_new_project),
         Page('## Просмотр проектов', show_projects),
     ]
-    render_horizontal_pages(pages)
+    render_horizontal_pages(pages, session_state=session_state)
 
 
 def create_new_project():
