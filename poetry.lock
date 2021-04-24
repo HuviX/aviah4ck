@@ -1124,19 +1124,6 @@ validators = "*"
 watchdog = {version = "*", markers = "platform_system != \"Darwin\""}
 
 [[package]]
-name = "streamlit-drawable-canvas"
-version = "0.6.0"
-description = "A Streamlit custom component for a free drawing canvas using Fabric.js."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-numpy = "*"
-Pillow = "*"
-streamlit = ">=0.63"
-
-[[package]]
 name = "streamlit-labelstudio"
 version = "0.0.3"
 description = "A Streamlit component that provides an annotation interface using the LabelStudio Frontend"
@@ -1347,7 +1334,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "83b6f389267bc0b2d569caa38480619fe4eab315fca5f7cf169b3ebf7b9d687d"
+content-hash = "89c3fbd0eec911b6b766505adeb59b1e76251420d0c924d90df1dff8788ed49b"
 
 [metadata.files]
 altair = [
@@ -2093,10 +2080,6 @@ sqlalchemy-utils = [
 streamlit = [
     {file = "streamlit-0.80.0-py2.py3-none-any.whl", hash = "sha256:156051dd1b2233d9cfa1d512edec8284567aa44def13cc228034e032bbb47d85"},
     {file = "streamlit-0.80.0.tar.gz", hash = "sha256:a67951245581bacce377bc33965890afe9170dc782d9ae4fcfc5fc05ace59013"},
-]
-streamlit-drawable-canvas = [
-    {file = "streamlit-drawable-canvas-0.6.0.tar.gz", hash = "sha256:77337d3c923c29d97028455c22c79af2754fb9dbf2e0a2014d85e014fe1772db"},
-    {file = "streamlit_drawable_canvas-0.6.0-py3-none-any.whl", hash = "sha256:a0f6d2732b6fb8b76c9e1223a1ea9ffa87c8ade680c309409c2ba831eaf82f3b"},
 ]
 streamlit-labelstudio = [
     {file = "streamlit-labelstudio-0.0.3.tar.gz", hash = "sha256:c65a3effd45456fcc9e8c183981e482da897399dec28cfcd8c375db161b12799"},
