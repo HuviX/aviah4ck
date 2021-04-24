@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "aviah4ck"
+version = "0.1.0"
+description = ""
+authors = ["Кабанчики <kabanchiki@mai.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+streamlit = "^0.80.0"
+streamlit-drawable-canvas = "^0.6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.3"
+mypy = "^0.782"
+flake8 = "^3.8.3"
+black = "^19.10b0"
+isort = "^4.3.21"
+pylint = "^2.6.0"
+unify = "^0.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
