@@ -1,0 +1,4 @@
+name,description,dataset_id,params,metrics,training_time,pretrained,project_id
+Лучше модель,resnext,1,"{""asd"":  512}","{""f1"":  0.975}",23,false,1
+Модель 1 ,123,1,"{""asd"":  512}","{""f1"":  0.525}",123,true,1
+Новая разработка Корее ,+20 сошал поинтов,2,"{""asd"":  512}","{""f1"":  0.925}",23423,false,2

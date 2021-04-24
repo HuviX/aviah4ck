@@ -11,11 +11,29 @@ def main():
     settings.setup_db()
     init_db(metadata=Base.metadata, db_url=settings.url, drop_existing=True)
 
-    datasets = pd.read_csv('app/db/dummy/dataset.csv')
     with create_session() as session:
-        for row in datasets.itertuples():
-            dataset = db.Dataset(name=row.name, description=row.description)  # noqa
-            session.add(dataset)
+        for row in pd.read_csv('app/db/dummy/dataset.csv').itertuples():
+            session.add(
+                db.Dataset(
+                    **{k: v for k, v in row._asdict().items() if k != 'Index'}  # noqa
+                )
+            )
+
+    with create_session() as session:
+        for row in pd.read_csv('app/db/dummy/project.csv').itertuples():
+            session.add(
+                db.Project(
+                    **{k: v for k, v in row._asdict().items() if k != 'Index'}  # noqa
+                )
+            )
+
+    with create_session() as session:
+        for row in pd.read_csv('app/db/dummy/model.csv').itertuples():
+            session.add(
+                db.Model(
+                    **{k: v for k, v in row._asdict().items() if k != 'Index'}  # noqa
+                )
+            )
 
 
 if __name__ == '__main__':
