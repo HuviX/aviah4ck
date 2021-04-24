@@ -11,6 +11,7 @@ from app.pages import (
     train_app,
 )
 from app.pages.utils import Page, render_sidebar_pages
+from app.db.settings import DBSettings
 
 TITLE = 'Кабанчики-ML'
 LOGO_URL = 'img/logo.png'
@@ -51,6 +52,7 @@ def get_readme():
 
 
 if __name__ == '__main__':
+    DBSettings().setup_db()
     st.set_page_config(
         page_title=TITLE, page_icon=LOGO_URL, layout='wide',
     )
