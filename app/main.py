@@ -12,6 +12,7 @@ from app.pages import (
     train_app,
 )
 
+TITLE = 'Кабанчики-ML'
 LOGO_URL = 'img/logo.png'
 LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
 
@@ -19,8 +20,8 @@ LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
 def main():
     st.sidebar.image(LOGO_URL)
     st.sidebar.markdown(
-        """
-            # Кабанчики-ML
+        f"""
+            # {TITLE}
             [![Star](https://img.shields.io/github/stars/HuviX/aviah4ck.svg?logo=github&style=social)](https://gitHub.com/HuviX/aviah4ck)
         """
     )
@@ -55,6 +56,6 @@ def render_page(page: Dict[str, Any]):
 
 if __name__ == '__main__':
     st.set_page_config(
-        page_title='Кабанчики-ML', page_icon=LOGO_URL, layout='wide',
+        page_title=TITLE, page_icon=LOGO_URL, layout='wide',
     )
     main()
