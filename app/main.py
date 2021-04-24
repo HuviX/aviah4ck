@@ -1,8 +1,16 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 import streamlit as st
 
-from app.pages import about_app, dataset_app, head_app, label_app, project_app, train_app, inference_app
+from app.pages import (
+    about_app,
+    dataset_app,
+    head_app,
+    inference_app,
+    label_app,
+    project_app,
+    train_app,
+)
 
 LOGO_URL = 'img/logo.png'
 LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
@@ -10,10 +18,12 @@ LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
 
 def main():
     st.sidebar.image(LOGO_URL)
-    st.sidebar.markdown("""
+    st.sidebar.markdown(
+        """
             # Кабанчики-ML
             [![Star](https://img.shields.io/github/stars/HuviX/aviah4ck.svg?logo=github&style=social)](https://gitHub.com/HuviX/aviah4ck)
-        """)
+        """
+    )
     pages = [
         {'name': 'Главная страница', 'app': head_app},
         {'name': 'Датасеты', 'app': dataset_app},
@@ -28,7 +38,7 @@ def main():
         if st.sidebar.button(page['name']):
             render_page(page)
 
-    st.sidebar.markdown("<hr>", unsafe_allow_html=True)
+    st.sidebar.markdown('<hr>', unsafe_allow_html=True)
     st.sidebar.image(LOGO_AVIAHACK_URL)
 
 
