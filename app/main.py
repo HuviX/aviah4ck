@@ -2,7 +2,7 @@ from typing import Dict, Any
 
 import streamlit as st
 
-from app.pages import about_app, dataset_app, head_app, label_app, project_app, train_app
+from app.pages import about_app, dataset_app, head_app, label_app, project_app, train_app, inference_app
 
 LOGO_URL = 'img/logo.png'
 LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
@@ -20,6 +20,7 @@ def main():
         {'name': 'Проекты', 'app': project_app},
         {'name': 'Разметка', 'app': label_app},
         {'name': 'Обучение', 'app': train_app},
+        {'name': 'Предсказание', 'app': inference_app},
         {'name': 'Об инструменте', 'app': about_app},
         {'name': 'Описание задачи', 'app': lambda: st.markdown(get_readme())},
     ]
