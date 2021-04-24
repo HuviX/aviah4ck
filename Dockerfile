@@ -11,8 +11,13 @@ ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-WORKDIR /app
-COPY . .
+WORKDIR /src
+
+COPY poetry.lock .
+COPY pyproject.toml .
+COPY Makefile .
 
 RUN make init
-RUN make run
+
+COPY . .
+CMD ["make", "run"]
