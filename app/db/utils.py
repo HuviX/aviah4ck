@@ -2,10 +2,13 @@ import logging
 from contextlib import contextmanager
 from typing import Any, Iterator
 
+import pandas as pd
 from sqlalchemy import MetaData
 from sqlalchemy.orm import Session as SessionClass
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists, drop_database
+
+from app.db.settings import DBSettings
 
 logger = logging.getLogger(__name__)
 
@@ -42,3 +45,10 @@ def create_session(**kwargs: Any) -> Iterator[SessionClass]:
         raise
     finally:
         new_session.close()
+
+
+def get_dataframe_from_query(query) -> pd.DataFrame:
+    logger.info('Making database query')
+    data = pd.read_sql(query.statement, DBSettings().url)
+    logger.info(f'Got {len(data)} records')
+    return data

@@ -1,6 +1,6 @@
-import SessionState
 import streamlit as st
 
+from app.db.settings import DBSettings
 from app.pages import (
     about_app,
     dataset_app,
@@ -11,14 +11,11 @@ from app.pages import (
     train_app,
 )
 from app.pages.utils import Page, render_sidebar_pages
-from app.db.settings import DBSettings
+from app.state import session_state
 
 TITLE = 'Кабанчики-ML'
 LOGO_URL = 'img/logo.png'
 LOGO_AVIAHACK_URL = 'img/logo_aviahack.png'
-
-
-session_state = SessionState.get(page=None)
 
 
 def main():

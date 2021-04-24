@@ -15,10 +15,11 @@ def render_sidebar_pages(pages: List[Page], session_state):
     for page in pages:
         if st.sidebar.button(page.name.replace('#', '')):
             session_state.page = page
+            session_state.subpage = None
     render_page(session_state.page or pages[0])
 
 
-def render_horizontal_pages(pages: List[Page], session_state=None):  # noqa
+def render_horizontal_pages(pages: List[Page], session_state):  # noqa
     lengths = [len(page.name) for page in pages]
     columns = st.beta_columns(lengths + lengths)  # 50/50
     buttons = [
@@ -27,7 +28,9 @@ def render_horizontal_pages(pages: List[Page], session_state=None):  # noqa
 
     for button, page in zip(buttons, pages):
         if button:
-            render_page(page)
+            session_state.subpage = page
+
+    render_page(session_state.subpage or pages[0])
 
 
 def render_page(page: Page):
