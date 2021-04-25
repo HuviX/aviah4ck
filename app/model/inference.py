@@ -157,6 +157,7 @@ def sliding_window_prediction(
         boxes = []
         scores = []
         for i, crop in crops.items():
+            print(i, 'crop')
             img = crop['image']
             img = test_time_transform(img).to(device)
             with torch.no_grad():
@@ -200,7 +201,7 @@ def main(**kwargs):
     model.to(device)
 
     if prediction_type == 'window':
-        res = sliding_window_prediction(model, path, canny_crop=True, k=3)
+        res = sliding_window_prediction(model, path, canny_crop=canny_crop, k=3)
     else:
         res = random_window_prediction(model, path, n_crops, top_k)
     cv2.imwrite(path_out, res)
