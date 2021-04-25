@@ -1,3 +1,5 @@
+import tarfile
+
 import pandas as pd
 
 from app import db
@@ -34,6 +36,12 @@ def main():
                     **{k: v for k, v in row._asdict().items() if k != 'Index'}  # noqa
                 )
             )
+
+    with tarfile.open('app/db/dummy/labelled_dataset.tar.xz') as f:
+        f.extractall(path=f'data/1/')
+
+    with tarfile.open('app/db/dummy/unlabelled_dataset.tar.xz') as f:
+        f.extractall(path=f'data/2/')
 
 
 if __name__ == '__main__':

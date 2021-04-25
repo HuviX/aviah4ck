@@ -125,6 +125,7 @@ def _save_dataset(name, description, dataset):
 def edit_dataset():
     st.markdown(
         """
+        TODO
         Можно данные в существующий датасет
         - выбор датасета
         - куда траин или тест или анлейбл?
@@ -135,22 +136,36 @@ def edit_dataset():
 
 
 def show_dataset():
-    st.dataframe(
-        get_dataframe_from_query(
-            Query(
-                [
-                    db.Dataset.name.label('Название датасета'),
-                    db.Dataset.description.label('Описание'),
-                    db.Dataset.train_count.label('Обучающих'),
-                    db.Dataset.test_count.label('Тестовых'),
-                    db.Dataset.unlabelled_count.label('Сырых'),
-                    db.Dataset.created_at.label('Дата создания'),
-                    db.Dataset.updated_at.label('Последнее изменение'),
-                ]
-            )
-            .order_by(desc(db.Dataset.updated_at))
-            .limit(50)
+    df = get_dataframe_from_query(
+        Query(
+            [
+                db.Dataset.id,
+                db.Dataset.name.label('Название датасета'),
+                db.Dataset.description.label('Описание'),
+                db.Dataset.train_count.label('Обучающих'),
+                db.Dataset.test_count.label('Тестовых'),
+                db.Dataset.unlabelled_count.label('Сырых'),
+                db.Dataset.created_at.label('Дата создания'),
+                db.Dataset.updated_at.label('Последнее изменение'),
+            ]
         )
+        .order_by(desc(db.Dataset.updated_at))
+        .limit(50)
     )
+    st.dataframe(df.drop('id', axis=1))
 
-    st.markdown("""TODO Показываем сами картинки!""")
+    selected_dataset = st.selectbox('Выбор датасета', df['Название датасета'].unique())
+
+    with create_session() as session:
+        dataset_id = (
+            session.query(db.Dataset.id)
+            .filter(db.Dataset.name == selected_dataset)
+            .first()[0]
+        )
+
+    try:
+        files = list((Path('data') / str(dataset_id)).rglob('*.png'))
+        selected_photo = st.selectbox('Фотография', files)
+        st.image(str(selected_photo))
+    except:
+        pass
