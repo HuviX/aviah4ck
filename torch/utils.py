@@ -383,7 +383,7 @@ class FruitImagesDataset(torch.utils.data.Dataset):
         # convert boxes into a torch.Tensor
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
         
-        area = torch.Tensor(self.widths[idx] * self.heights[idx])
+        area = torch.Tensor([self.widths[idx] * self.heights[idx]])
 
         # suppose all instances are not crowd
         iscrowd = torch.zeros((boxes.shape[0],), dtype=torch.int64)
@@ -408,9 +408,7 @@ class FruitImagesDataset(torch.utils.data.Dataset):
             
             img_res = sample['image']
             target['boxes'] = torch.Tensor(sample['bboxes'])
-            
-            
-            
+
         return img_res, target
 
     def __len__(self):
