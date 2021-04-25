@@ -203,3 +203,17 @@ def main(**kwargs):
         res = random_window_prediction(model, path, n_crops, top_k)
     cv2.imwrite(path_out, res)
     print('Done')
+
+
+if __name__ == '__main__':
+    kwargs = {
+        'path': 'data/1/test/4.png',
+        'n_crops': 228,
+        'path_out': 'res.png',
+        'top_k': 3,
+        'type': 'window',  # or 'random'
+        'canny_crop': True,
+        'model_path': 'app/model/data/state9.pth'
+    }
+
+    main(**kwargs)
