@@ -1,17 +1,16 @@
-from collections import defaultdict, deque
 import datetime
-import pickle
-import time
-
-import torch
-import torch.distributed as dist
-
 import errno
 import os
-import cv2
+import pickle
+import time
+from collections import defaultdict, deque
+
 import albumentations as A
-from albumentations.pytorch.transforms import ToTensorV2
+import cv2
 import numpy as np
+import torch
+import torch.distributed as dist
+from albumentations.pytorch.transforms import ToTensorV2
 
 
 class SmoothedValue(object):
@@ -21,7 +20,7 @@ class SmoothedValue(object):
 
     def __init__(self, window_size=20, fmt=None):
         if fmt is None:
-            fmt = "{median:.4f} ({global_avg:.4f})"
+            fmt = '{median:.4f} ({global_avg:.4f})'
         self.deque = deque(maxlen=window_size)
         self.total = 0.0
         self.count = 0
@@ -73,7 +72,8 @@ class SmoothedValue(object):
             avg=self.avg,
             global_avg=self.global_avg,
             max=self.max,
-            value=self.value)
+            value=self.value,
+        )
 
 
 def all_gather(data):
@@ -91,11 +91,11 @@ def all_gather(data):
     # serialized to a Tensor
     buffer = pickle.dumps(data)
     storage = torch.ByteStorage.from_buffer(buffer)
-    tensor = torch.ByteTensor(storage).to("cuda")
+    tensor = torch.ByteTensor(storage).to('cuda')
 
     # obtain Tensor size of each rank
-    local_size = torch.tensor([tensor.numel()], device="cuda")
-    size_list = [torch.tensor([0], device="cuda") for _ in range(world_size)]
+    local_size = torch.tensor([tensor.numel()], device='cuda')
+    size_list = [torch.tensor([0], device='cuda') for _ in range(world_size)]
     dist.all_gather(size_list, local_size)
     size_list = [int(size.item()) for size in size_list]
     max_size = max(size_list)
@@ -105,9 +105,11 @@ def all_gather(data):
     # gathering tensors of different shapes
     tensor_list = []
     for _ in size_list:
-        tensor_list.append(torch.empty((max_size,), dtype=torch.uint8, device="cuda"))
+        tensor_list.append(torch.empty((max_size,), dtype=torch.uint8, device='cuda'))
     if local_size != max_size:
-        padding = torch.empty(size=(max_size - local_size,), dtype=torch.uint8, device="cuda")
+        padding = torch.empty(
+            size=(max_size - local_size,), dtype=torch.uint8, device='cuda'
+        )
         tensor = torch.cat((tensor, padding), dim=0)
     dist.all_gather(tensor_list, tensor)
 
@@ -147,7 +149,7 @@ def reduce_dict(input_dict, average=True):
 
 
 class MetricLogger(object):
-    def __init__(self, delimiter="\t"):
+    def __init__(self, delimiter='\t'):
         self.meters = defaultdict(SmoothedValue)
         self.delimiter = delimiter
 
@@ -163,15 +165,14 @@ class MetricLogger(object):
             return self.meters[attr]
         if attr in self.__dict__:
             return self.__dict__[attr]
-        raise AttributeError("'{}' object has no attribute '{}'".format(
-            type(self).__name__, attr))
+        raise AttributeError(
+            "'{}' object has no attribute '{}'".format(type(self).__name__, attr)
+        )
 
     def __str__(self):
         loss_str = []
         for name, meter in self.meters.items():
-            loss_str.append(
-                "{}: {}".format(name, str(meter))
-            )
+            loss_str.append('{}: {}'.format(name, str(meter)))
         return self.delimiter.join(loss_str)
 
     def synchronize_between_processes(self):
@@ -191,24 +192,28 @@ class MetricLogger(object):
         data_time = SmoothedValue(fmt='{avg:.4f}')
         space_fmt = ':' + str(len(str(len(iterable)))) + 'd'
         if torch.cuda.is_available():
-            log_msg = self.delimiter.join([
-                header,
-                '[{0' + space_fmt + '}/{1}]',
-                'eta: {eta}',
-                '{meters}',
-                'time: {time}',
-                'data: {data}',
-                'max mem: {memory:.0f}'
-            ])
+            log_msg = self.delimiter.join(
+                [
+                    header,
+                    '[{0' + space_fmt + '}/{1}]',
+                    'eta: {eta}',
+                    '{meters}',
+                    'time: {time}',
+                    'data: {data}',
+                    'max mem: {memory:.0f}',
+                ]
+            )
         else:
-            log_msg = self.delimiter.join([
-                header,
-                '[{0' + space_fmt + '}/{1}]',
-                'eta: {eta}',
-                '{meters}',
-                'time: {time}',
-                'data: {data}'
-            ])
+            log_msg = self.delimiter.join(
+                [
+                    header,
+                    '[{0' + space_fmt + '}/{1}]',
+                    'eta: {eta}',
+                    '{meters}',
+                    'time: {time}',
+                    'data: {data}',
+                ]
+            )
         MB = 1024.0 * 1024.0
         for obj in iterable:
             data_time.update(time.time() - end)
@@ -218,22 +223,37 @@ class MetricLogger(object):
                 eta_seconds = iter_time.global_avg * (len(iterable) - i)
                 eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
                 if torch.cuda.is_available():
-                    print(log_msg.format(
-                        i, len(iterable), eta=eta_string,
-                        meters=str(self),
-                        time=str(iter_time), data=str(data_time),
-                        memory=torch.cuda.max_memory_allocated() / MB))
+                    print(
+                        log_msg.format(
+                            i,
+                            len(iterable),
+                            eta=eta_string,
+                            meters=str(self),
+                            time=str(iter_time),
+                            data=str(data_time),
+                            memory=torch.cuda.max_memory_allocated() / MB,
+                        )
+                    )
                 else:
-                    print(log_msg.format(
-                        i, len(iterable), eta=eta_string,
-                        meters=str(self),
-                        time=str(iter_time), data=str(data_time)))
+                    print(
+                        log_msg.format(
+                            i,
+                            len(iterable),
+                            eta=eta_string,
+                            meters=str(self),
+                            time=str(iter_time),
+                            data=str(data_time),
+                        )
+                    )
             i += 1
             end = time.time()
         total_time = time.time() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
-        print('{} Total time: {} ({:.4f} s / it)'.format(
-            header, total_time_str, total_time / len(iterable)))
+        print(
+            '{} Total time: {} ({:.4f} s / it)'.format(
+                header, total_time_str, total_time / len(iterable)
+            )
+        )
 
 
 def collate_fn(batch):
@@ -241,7 +261,6 @@ def collate_fn(batch):
 
 
 def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
-
     def f(x):
         if x >= warmup_iters:
             return 1
@@ -264,6 +283,7 @@ def setup_for_distributed(is_master):
     This function disables printing when not in master process
     """
     import builtins as __builtin__
+
     builtin_print = __builtin__.print
 
     def print(*args, **kwargs):
@@ -305,7 +325,7 @@ def save_on_master(*args, **kwargs):
 
 def init_distributed_mode(args):
     if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
-        args.rank = int(os.environ["RANK"])
+        args.rank = int(os.environ['RANK'])
         args.world_size = int(os.environ['WORLD_SIZE'])
         args.gpu = int(os.environ['LOCAL_RANK'])
     elif 'SLURM_PROCID' in os.environ:
@@ -320,16 +340,20 @@ def init_distributed_mode(args):
 
     torch.cuda.set_device(args.gpu)
     args.dist_backend = 'nccl'
-    print('| distributed init (rank {}): {}'.format(
-        args.rank, args.dist_url), flush=True)
-    torch.distributed.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
-                                         world_size=args.world_size, rank=args.rank)
+    print(
+        '| distributed init (rank {}): {}'.format(args.rank, args.dist_url), flush=True
+    )
+    torch.distributed.init_process_group(
+        backend=args.dist_backend,
+        init_method=args.dist_url,
+        world_size=args.world_size,
+        rank=args.rank,
+    )
     torch.distributed.barrier()
     setup_for_distributed(args.rank == 0)
 
 
 class FruitImagesDataset(torch.utils.data.Dataset):
-
     def __init__(self, files_dir, width, height, df, transforms=None):
         self.transforms = transforms
         self.files_dir = files_dir
@@ -342,25 +366,24 @@ class FruitImagesDataset(torch.utils.data.Dataset):
         self.cat = df['category'].values
         self.imgs = df.image.values
         self.df = df
-        
+
         # classes: 0 index is reserved for background
         self.classes = ['back', 'scratch', 'rak']
         self.mapping = {'scratch': 1, 'rak': 2}
-
 
     def __getitem__(self, idx):
         img_name = self.imgs[idx]
         image_path = os.path.join(self.files_dir, img_name)
 
-        # reading the images and converting them to correct size and color    
+        # reading the images and converting them to correct size and color
         img = cv2.imread(image_path)
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32)
         img_res = cv2.resize(img_rgb, (self.width, self.height), cv2.INTER_AREA)
         img_res /= 255.0
-        
+
         boxes = []
         labels = []
-        
+
         # cv2 image gives size as height x width
         wt = img.shape[1]
         ht = img.shape[0]
@@ -374,43 +397,40 @@ class FruitImagesDataset(torch.utils.data.Dataset):
         xmax = xmin + self.widths[idx]
         ymin = self.ymin[idx]
         ymax = ymin + self.heights[idx]
-        xmin_corr = (xmin/wt)*self.width
-        xmax_corr = (xmax/wt)*self.width
-        ymin_corr = (ymin/ht)*self.height
-        ymax_corr = (ymax/ht)*self.height
+        xmin_corr = (xmin / wt) * self.width
+        xmax_corr = (xmax / wt) * self.width
+        ymin_corr = (ymin / ht) * self.height
+        ymax_corr = (ymax / ht) * self.height
 
-        boxes.append([xmin_corr, ymin_corr,  xmax_corr, ymax_corr])
+        boxes.append([xmin_corr, ymin_corr, xmax_corr, ymax_corr])
         # convert boxes into a torch.Tensor
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
-        
+
         area = torch.Tensor(self.widths[idx] * self.heights[idx])
 
         # suppose all instances are not crowd
         iscrowd = torch.zeros((boxes.shape[0],), dtype=torch.int64)
-        
+
         labels = torch.as_tensor(labels, dtype=torch.int64)
 
         target = {}
-        target["boxes"] = boxes
-        target["labels"] = labels
-        target["area"] = area
-        target["iscrowd"] = iscrowd
+        target['boxes'] = boxes
+        target['labels'] = labels
+        target['area'] = area
+        target['iscrowd'] = iscrowd
         # image_id
         image_id = torch.tensor([idx])
-        target["image_id"] = image_id
-
+        target['image_id'] = image_id
 
         if self.transforms:
-            
-            sample = self.transforms(image = img_res,
-                                     bboxes = target['boxes'],
-                                     labels = labels)
-            
+
+            sample = self.transforms(
+                image=img_res, bboxes=target['boxes'], labels=labels
+            )
+
             img_res = sample['image']
             target['boxes'] = torch.Tensor(sample['bboxes'])
-            
-            
-            
+
         return img_res, target
 
     def __len__(self):
