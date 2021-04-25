@@ -66,6 +66,17 @@ def get_boxes_for_large_image(path: str, n_crops: int = 100) -> np.ndarray:
         d = {'image': src_img[y1: y2, x1: x2],
              'coords': (y1, y2, x1, x2)}
         crops[i] = d
+
+    #Model outputs a dictionary with keys 'scores', 'boxes', 'labels'
+    # scores_i corresponds to confidence of boxes_i.
+    # Ex: {scores: [0.1, 0.43, 0.2, ...],
+    #      bbox: [(x1, x2, w, h), ...],
+    #      labels: [1, 2, 1, 1, ...]
+    #    }
+
+    # Get the maximum confidence for bbox across image(crop).
+    # Store these values across all n_crops in order to 
+    # choose the most confident one. (or three as in this function)
     boxes = []
     scores = []
     for i, crop in crops.items():
@@ -76,10 +87,11 @@ def get_boxes_for_large_image(path: str, n_crops: int = 100) -> np.ndarray:
         idx = torch.argmax(prediction['scores'].cpu())
         max_score = prediction['scores'][idx]
         box = prediction['boxes'][idx]
-        # print(prediction['labels'][idx])
         boxes.append(box)
         scores.append(max_score)
+    # pick 3 most confident boxes for all n_crops
     top3 = torch.argsort(torch.tensor(scores), descending=True)[: 3]
+
     for ind in top3:
         ind = ind.item()
         box = boxes[ind]
