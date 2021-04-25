@@ -1,3 +1,5 @@
+import subprocess
+
 import pandas as pd
 import torchvision
 from torch.utils.tensorboard import SummaryWriter
@@ -43,7 +45,7 @@ def get_transform(train):
 def do_shell(checkpoint_dir, logdir):
     os.system(f'rm -r {logdir}')
     os.system(f'mkdir {logdir}')
-    os.system(f'tensorboard --logdir={logdir} --bind_all')
+    # subprocess.run(['tensorboard --logdir {logdir} --bind_all'])
     os.system(f'mkdir {checkpoint_dir}')
 
 
@@ -170,7 +172,7 @@ def main(**kwargs):
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
     num_epochs = 10
     writer = SummaryWriter(logdir)
-    # do_shell(checkpoint_dir, logdir)
+    do_shell(checkpoint_path, logdir)
 
     for epoch in range(num_epochs):
         train_one_epoch(
