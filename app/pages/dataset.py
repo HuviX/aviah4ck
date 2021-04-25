@@ -3,7 +3,9 @@ import tarfile
 import time
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
+from PIL import Image, ImageDraw
 from sqlalchemy import desc
 from sqlalchemy.orm import Query
 
@@ -164,8 +166,23 @@ def show_dataset():
         )
 
     try:
-        files = list((Path('data') / str(dataset_id)).rglob('*.png'))
-        selected_photo = st.selectbox('Фотография', files)
-        st.image(str(selected_photo))
-    except:
-        pass
+        photo_paths = list((Path('data') / str(dataset_id)).rglob('*.png'))
+        selected_photo = st.selectbox('Фотография', photo_paths)
+
+        label_paths = list((Path('data') / str(dataset_id)).rglob('*.csv'))
+        if label_paths:
+            labels = pd.concat([pd.read_csv(i) for i in label_paths], ignore_index=True)
+            labels = labels[labels.image == selected_photo.name]
+            _, x, y, w, h = labels.values[0]
+            with Image.open(selected_photo) as im:
+                draw = ImageDraw.Draw(im)
+                draw.rectangle([(x, y), (x + w, y + h)], width=3, outline='#F63366')
+                im.save('data/tmp.png')
+
+            st.image('data/tmp.png')
+            st.dataframe(labels)
+        else:
+            st.image(str(selected_photo))
+
+    except Exception as e:
+        logger.info(e)
