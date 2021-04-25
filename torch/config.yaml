@@ -1,0 +1,9 @@
+device: '5'
+dataset_path: crops_df_big.csv
+image_size: 224
+pic_dir: crops
+split_rate: 0.8
+num_classes: 3
+num_epochs: 20
+checkpoint_path: detector_checks
+logdir: logs

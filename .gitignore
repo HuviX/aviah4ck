@@ -265,3 +265,6 @@ ENV/
 
 # fsdata storage
 data/
+torch/crops
+torch/logs
+torch/detector_checks
