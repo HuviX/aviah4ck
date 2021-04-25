@@ -64,7 +64,7 @@ def test_time_transform(image, w=224, h=224):
     return ToTensorV2()(image=img_res)['image']
     
 
-def random_window_prediction(model, path: str, n_crops: int = 100, k: int = 1, canny_crop: bool = False) -> np.ndarray:
+def random_window_prediction(model, path: str, n_crops: int = 100, k: int = 1, canny_crop: bool = False,  device=torch.device('cpu')) -> np.ndarray:
     src_img = cv2.imread(path)
     if canny_crop:
         src_img = crop_canny(src_img)
@@ -117,7 +117,7 @@ def random_window_prediction(model, path: str, n_crops: int = 100, k: int = 1, c
         cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 2)
     return src_img
 
-def sliding_window_prediction(model, path: str, windows: List[int] = [224], canny_crop: bool = False, k: int = 1):
+def sliding_window_prediction(model, path: str, windows: List[int] = [224], canny_crop: bool = False, k: int = 1, device=torch.device('cpu')):
     src_img = cv2.imread(path)
     im = src_img
     if canny_crop:
