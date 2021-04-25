@@ -92,12 +92,20 @@ def get_boxes_for_large_image(path: str, n_crops: int = 100) -> np.ndarray:
     return src_img
 
 
+
+
 ##entry-point
 def main(**kwargs):
     path = kwargs['path']
     n_crops = kwargs['n_crops']
     path_out = kwargs['path_out']
-    # to use this you need to create a model
+    # How to: model initialization
+    # model = get_object_detection_model(3)
+    # model.load_state_dict(torch.load(path)['model'])
+    # model.eval()
+    # model.cuda()
+
+    # to use this you need to create a model first
     res = get_boxes_for_large_image(path, n_crops)
     # res = get_boxes_for_large_image('../../hacc/add/scratch/IMG_3679.JPG', 500)
     cv2.imwrite(path_out, res)
