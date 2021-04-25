@@ -213,7 +213,7 @@ if __name__ == '__main__':
         'top_k': 3,
         'type': 'window',  # or 'random'
         'canny_crop': True,
-        'model_path': 'app/model/data/state9.pth'
+        'model_path': 'app/model/data/state9.pth',
     }
 
     main(**kwargs)

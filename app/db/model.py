@@ -18,3 +18,4 @@ class Model(Base):
     pretrained = sa.Column(sa.Boolean, default=False)
 
     project_id = sa.Column(sa.Integer, sa.ForeignKey('project.id'))
+    path = sa.Column(sa.String, nullable=False)

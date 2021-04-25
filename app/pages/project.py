@@ -86,5 +86,3 @@ def show_projects():
             .order_by(desc(db.Model.created_at))
         )
     )
-
-    st.markdown("""TODO Тут должен быть отчет""")

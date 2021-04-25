@@ -7,8 +7,8 @@ from streamlit_labelstudio import st_labelstudio
 from app import db
 from app.db.utils import get_dataframe_from_query
 
-
 IP = '10.129.0.9'
+
 
 def app():
     st.markdown(
