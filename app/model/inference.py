@@ -181,7 +181,6 @@ def sliding_window_prediction(
     return src_img
 
 
-##entry-point
 def main(**kwargs):
     os.environ['CUDA_VISIBLE_DEVICES'] = '5'
     path = kwargs['path']
@@ -208,17 +207,15 @@ def main(**kwargs):
     print('Done')
 
 
-# ---- Usage ----
-# from inference import main
+if __name__ == '__main__':
+    kwargs = {
+        'path': 'app/model/data/large.png',
+        'n_crops': 228,
+        'path_out': 'res.png',
+        'top_k': 3,
+        'type': 'window',  # or 'random'
+        'canny_crop': True,
+        'model_path': 'app/model/data/state0.pth'
+    }
 
-# kwargs = {
-#     'path': '/path/to/img.png',
-#     'n_crops': 228,
-#     'path_out': 'res2.png',
-#     'top_k': 3,
-#     'type': 'window', # or 'random'
-#     'canny_crop': True,
-#     'model_path': 'state.pth'
-# }
-
-# main(**kwargs)
+    main(**kwargs)
