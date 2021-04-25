@@ -10,7 +10,9 @@ def save_checkpoint(epoch, model, optimizer, checkpoint_path):
     state = {'model': model.state_dict(), 'optimizer': optimizer.state_dict()}
     if checkpoint_path[-1] != '/':
         checkpoint_path += '/'
-    torch.save(state, checkpoint_path + 'state' + str(epoch) + '.pth')
+    path = checkpoint_path + 'state' + str(epoch) + '.pth'
+    torch.save(state, path)
+    return path
 
 
 def get_object_detection_model(num_classes):
@@ -176,7 +178,7 @@ def main(**kwargs):
         # save_checkpoint(epoch, model, optimizer, checkpoint_path)
         lr_scheduler.step()
         evaluate(model, test_loader, device, writer)
-    save_checkpoint(epoch, model, optimizer, checkpoint_path)
+    return save_checkpoint(epoch, model, optimizer, checkpoint_path)
 
 
 # Usage
