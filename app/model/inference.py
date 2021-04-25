@@ -10,7 +10,6 @@ from albumentations.pytorch.transforms import ToTensorV2
 from torchvision import transforms
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -151,7 +150,7 @@ def sliding_window_prediction(
         scores = []
         for i, crop in crops.items():
             print(i, 'crop')
-            logger.error("crop %d", i)
+            logger.error('crop %d', i)
             img = crop['image']
             img = test_time_transform(img).to(device)
             with torch.no_grad():
@@ -201,7 +200,9 @@ def main(**kwargs):
     model.to(device)
 
     if prediction_type == 'window':
-        res = sliding_window_prediction(model, path, canny_crop=canny_crop, k=3, device=device)
+        res = sliding_window_prediction(
+            model, path, canny_crop=canny_crop, k=3, device=device
+        )
     else:
         res = random_window_prediction(model, path, n_crops, top_k, device=device)
     cv2.imwrite(path_out, res)
@@ -216,7 +217,7 @@ if __name__ == '__main__':
         'top_k': 3,
         'type': 'window',  # or 'random'
         'canny_crop': True,
-        'model_path': 'app/model/data/state9.pth'
+        'model_path': 'app/model/data/state9.pth',
     }
 
     main(**kwargs)

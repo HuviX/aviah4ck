@@ -64,7 +64,7 @@ def app():
                 'top_k': 3,
                 'type': 'window',  # or 'random'
                 'canny_crop': False,
-                'model_path': str(model_path)
+                'model_path': str(model_path),
             }
             main(**kwargs)
             st.image('res.png')

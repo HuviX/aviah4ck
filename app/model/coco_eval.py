@@ -6,9 +6,10 @@ import numpy as np
 import pycocotools.mask as mask_util
 import torch
 import torch._six
-from app.model import utils
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
+
+from app.model import utils
 
 
 class CocoEvaluator(object):

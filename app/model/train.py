@@ -15,7 +15,6 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from app.model import utils
 
 
-
 def save_checkpoint(epoch, model, optimizer, checkpoint_path):
     state = {'model': model.state_dict(), 'optimizer': optimizer.state_dict()}
     if checkpoint_path[-1] != '/':

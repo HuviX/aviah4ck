@@ -2,16 +2,15 @@ import streamlit as st
 from sqlalchemy.orm import Query
 
 from app import db
-from app.db.utils import get_dataframe_from_query, create_session
+from app.db.utils import create_session, get_dataframe_from_query
 from app.model.train_entry import main
 
 
 def app():
-    df = get_dataframe_from_query(
-        Query(db.Dataset)
-    )
+    df = get_dataframe_from_query(Query(db.Dataset))
     st.dataframe(df)
-    st.markdown("""
+    st.markdown(
+        """
     ```
     *Пример конфига*
     {
@@ -24,7 +23,8 @@ def app():
         'logdir': 'train_entry_log'
     }
     ```
-    """)
+    """
+    )
     name = st.text_input('Название модели')
     description = st.text_input('Описание модели')
     st.text_area('Конфиг модели')
@@ -49,13 +49,18 @@ def app():
             'pretrained': True,
             'num_classes': 3,
             'checkpoint_path': checkpoint_path,
-            'logdir': 'train_entry_log'
+            'logdir': 'train_entry_log',
         }
         checkpoint_path = main(**kwargs)
         st.info('Модель обучилась')
 
         with create_session() as session:
-            session.add(db.Model(
-                name=name, description=description, path=checkpoint_path,
-                dataset_id=dataset_id, project_id=1,
-            ))
+            session.add(
+                db.Model(
+                    name=name,
+                    description=description,
+                    path=checkpoint_path,
+                    dataset_id=dataset_id,
+                    project_id=1,
+                )
+            )

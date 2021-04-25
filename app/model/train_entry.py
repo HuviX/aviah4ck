@@ -1,8 +1,9 @@
 import pandas as pd
 import torchvision
-from app.model.engine import evaluate, train_one_epoch
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+
+from app.model.engine import evaluate, train_one_epoch
 from app.model.utils import *
 
 
