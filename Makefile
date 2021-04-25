@@ -13,8 +13,11 @@ init:
 	$(VENV)/bin/python -m pip install poetry
 	$(VENV)/bin/poetry install -v
 
-run:
+run: run-label
 	PYTHONPATH=. $(VENV)/bin/python -m streamlit run app/main.py
+
+run-label:
+	cd script && ../$(VENV)/bin/python -m flask run &
 
 up:
 	docker-compose up app

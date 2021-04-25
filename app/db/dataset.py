@@ -14,7 +14,7 @@ class DatasetType(Enum):
 class Dataset(Base):
     __tablename__ = 'dataset'
 
-    name = sa.Column(sa.String, nullable=False)
+    name = sa.Column(sa.String, nullable=False, unique=True)
     description = sa.Column(sa.Text, nullable=True)
     train_count = sa.Column(sa.Integer, nullable=False, default=0)
     test_count = sa.Column(sa.Integer, nullable=False, default=0)

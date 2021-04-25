@@ -10,7 +10,7 @@ services:
     ports:
       - 8501:8501
     environment:
-      - DB_URL: "postgresql://postgres:postgres@db:5432/kabanchiki"
+      DB_URL: "postgresql://postgres:postgres@db:5432/kabanchiki"
     depends_on:
       - db
 

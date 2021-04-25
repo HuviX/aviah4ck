@@ -3,7 +3,9 @@ import tarfile
 import time
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
+from PIL import Image, ImageDraw
 from sqlalchemy import desc
 from sqlalchemy.orm import Query
 
@@ -17,11 +19,18 @@ logger = logging.getLogger(__name__)
 
 
 def app():
-    st.markdown("""TODO (v.karmazin) добавить умный текст""")
+    st.markdown(
+        """
+    *В датасетах хранятся данные 3 типов*
+    - Обучающие данные
+    - Тестовые данные
+    - Сырые данные / данные без меток
+    """
+    )
     pages = [
         Page('## Просмотр датасета', show_dataset),
-        Page('## Создать новый датасет', create_dataset),
-        Page('## Редактирование датасета', edit_dataset),
+        Page('## Загрузить датасет', create_dataset),
+        Page('## Редактировать датасет', edit_dataset),
     ]
     render_horizontal_pages(pages, session_state=session_state)
 
@@ -118,43 +127,62 @@ def _save_dataset(name, description, dataset):
 def edit_dataset():
     st.markdown(
         """
+        TODO
         Можно данные в существующий датасет
         - выбор датасета
-        - траин или тест?
-        - данные в архив? csv?
+        - куда траин или тест или анлейбл?
+        - по одной или несколько фоток?
         - кнопка, есть метка или нет?
     """
     )
 
 
 def show_dataset():
-    st.dataframe(
-        get_dataframe_from_query(
-            Query(
-                [
-                    db.Dataset.name.label('Название датасета'),
-                    db.Dataset.description.label('Описание'),
-                    db.Dataset.train_count.label('Обучающих'),
-                    db.Dataset.test_count.label('Тестовых'),
-                    db.Dataset.unlabelled_count.label('Сырых'),
-                    db.Dataset.created_at.label('Дата создания'),
-                    db.Dataset.updated_at.label('Последнее изменение'),
-                ]
-            )
-            .order_by(desc(db.Dataset.updated_at))
-            .limit(50)
+    df = get_dataframe_from_query(
+        Query(
+            [
+                db.Dataset.id,
+                db.Dataset.name.label('Название датасета'),
+                db.Dataset.description.label('Описание'),
+                db.Dataset.train_count.label('Обучающих'),
+                db.Dataset.test_count.label('Тестовых'),
+                db.Dataset.unlabelled_count.label('Сырых'),
+                db.Dataset.created_at.label('Дата создания'),
+                db.Dataset.updated_at.label('Последнее изменение'),
+            ]
         )
+        .order_by(desc(db.Dataset.updated_at))
+        .limit(50)
     )
+    st.dataframe(df.drop('id', axis=1))
 
-    st.markdown(
-        """
-        Показываем таблицу существующих датасетов (из базы)
-        - Название датасета
-        - Описание датасета
-        - Процент размеченных данных в датасете
-        - Классы в датасете
-        - ?? Версия датасета (время создания и время последнего обновления)
-        
-        Показываем сами картинки!
-    """
-    )
+    selected_dataset = st.selectbox('Выбор датасета', df['Название датасета'].unique())
+
+    with create_session() as session:
+        dataset_id = (
+            session.query(db.Dataset.id)
+            .filter(db.Dataset.name == selected_dataset)
+            .first()[0]
+        )
+
+    try:
+        photo_paths = list((Path('data') / str(dataset_id)).rglob('*.png'))
+        selected_photo = st.selectbox('Фотография', photo_paths)
+
+        label_paths = list((Path('data') / str(dataset_id)).rglob('*.csv'))
+        if label_paths:
+            labels = pd.concat([pd.read_csv(i) for i in label_paths], ignore_index=True)
+            labels = labels[labels.image == selected_photo.name]
+            _, x, y, w, h = labels.values[0]
+            with Image.open(selected_photo) as im:
+                draw = ImageDraw.Draw(im)
+                draw.rectangle([(x, y), (x + w, y + h)], width=3, outline='#F63366')
+                im.save('data/tmp.png')
+
+            st.image('data/tmp.png')
+            st.dataframe(labels)
+        else:
+            st.image(str(selected_photo))
+
+    except Exception as e:
+        logger.info(e)

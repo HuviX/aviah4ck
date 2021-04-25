@@ -18,6 +18,7 @@ COPY pyproject.toml .
 COPY Makefile .
 
 RUN make init
+RUN cd script && ../$(VENV)/bin/python -m flask run &
 
 COPY . .
 CMD ["make", "run"]

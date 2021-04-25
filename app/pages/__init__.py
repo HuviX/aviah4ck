@@ -1,4 +1,3 @@
-from .about import app as about_app
 from .label import app as label_app
 from .train import app as train_app
 from .dataset import app as dataset_app
