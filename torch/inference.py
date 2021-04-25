@@ -95,7 +95,7 @@ def random_window_prediction(model, path: str, n_crops: int = 100, k: int = 1, c
     scores = []
     for i, crop in crops.items():
         img = crop['image']
-        img = test_time_transform(img).cuda()
+        img = test_time_transform(img).to(device)
         with torch.no_grad():
             prediction = model([img])[0]
         idx = torch.argmax(prediction['scores'].cpu())
@@ -145,7 +145,7 @@ def sliding_window_prediction(model, path: str, windows: List[int] = [224], cann
         scores = []
         for i, crop in crops.items():
             img = crop['image']
-            img = test_time_transform(img).cuda()
+            img = test_time_transform(img).to(device)
             with torch.no_grad():
                 prediction = model([img])[0]
             idx = torch.argmax(prediction['scores'].cpu())
@@ -180,12 +180,12 @@ def main(**kwargs):
     canny_crop = kwargs['canny_crop']
     model_path = kwargs['model_path']
     prediction_type = kwargs['type']
-
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     # How to: model initialization
     model = get_object_detection_model(3)
     model.load_state_dict(torch.load(model_path)['model'])
     model.eval()
-    model.cuda()
+    model.to(device)
 
     if prediction_type == 'window'
         res = sliding_window_prediction(model, path, canny_crop=True, k=3)
