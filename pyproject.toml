@@ -19,6 +19,7 @@ addict = "^2.4.0"
 torch = "^1.8.1"
 torchvision = "^0.9.1"
 opencv-python = "^4.5.1"
+tensorboard = "^2.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"

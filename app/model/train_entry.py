@@ -1,22 +1,9 @@
-import os
-import random
-import warnings
-
-import addict
-import albumentations as A
-import cv2
-import numpy as np
 import pandas as pd
-import torch
 import torchvision
-import yaml
-from albumentations.pytorch.transforms import ToTensorV2
-from engine import evaluate, train_one_epoch
+from app.model.engine import evaluate, train_one_epoch
 from torch.utils.tensorboard import SummaryWriter
-from torchvision import transforms as torchtrans
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-from utils import *
-
+from app.model.utils import *
 
 
 def save_checkpoint(epoch, model, optimizer, checkpoint_path):

@@ -63,11 +63,11 @@ def app():
                 'path_out': 'res.png',
                 'top_k': 3,
                 'type': 'window',  # or 'random'
-                'canny_crop': True,
+                'canny_crop': False,
                 'model_path': str(model_path)
             }
             main(**kwargs)
             st.image('res.png')
 
-        except:
-            st.error('Ошибка')
+        except Exception as e:
+            st.exception(e)

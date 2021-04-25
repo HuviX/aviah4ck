@@ -1,25 +1,18 @@
 import logging
 import os
-import random
-import warnings
 from typing import List
 
-import addict
-import albumentations as A
 import cv2
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import torch
 import torchvision
-import yaml
 from albumentations.pytorch.transforms import ToTensorV2
 from torchvision import transforms
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 
 logger = logging.getLogger(__name__)
+
 
 # canny filter crop to remove background
 def crop_canny(img):
@@ -76,7 +69,7 @@ def random_window_prediction(
     if canny_crop:
         src_img = crop_canny(src_img)
 
-    ## define a 100 of crops
+    # define a 100 of crops
     crops = {}
     for i in range(n_crops):
         size = np.random.randint(440, 512)
@@ -163,11 +156,16 @@ def sliding_window_prediction(
             img = test_time_transform(img).to(device)
             with torch.no_grad():
                 prediction = model([img])[0]
-            idx = torch.argmax(prediction['scores'].cpu())
-            max_score = prediction['scores'][idx]
-            box = prediction['boxes'][idx]
-            boxes.append(box)
-            scores.append(max_score)
+
+            try:
+                idx = torch.argmax(prediction['scores'].cpu())
+                max_score = prediction['scores'][idx]
+                box = prediction['boxes'][idx]
+                boxes.append(box)
+                scores.append(max_score)
+            except:
+                boxes.append([])
+                scores.append(0)
 
         top = torch.argsort(torch.tensor(scores), descending=True)[:k]
         for ind in top:
@@ -179,7 +177,8 @@ def sliding_window_prediction(
             xmax = box[2] + xmin
             ymax = box[3] + ymin
             cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 4)
-        src_img[cy[0] : cy[1], cx[0] : cx[1]] = im
+        if canny_crop:
+            src_img[cy[0] : cy[1], cx[0] : cx[1]] = im
     return src_img
 
 

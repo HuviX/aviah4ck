@@ -19,3 +19,4 @@ class Dataset(Base):
     train_count = sa.Column(sa.Integer, nullable=False, default=0)
     test_count = sa.Column(sa.Integer, nullable=False, default=0)
     unlabelled_count = sa.Column(sa.Integer, nullable=False, default=0)
+    path = sa.Column(sa.String)

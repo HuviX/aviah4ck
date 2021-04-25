@@ -6,7 +6,7 @@ import numpy as np
 import pycocotools.mask as mask_util
 import torch
 import torch._six
-import utils
+from app.model import utils
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
