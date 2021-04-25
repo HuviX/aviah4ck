@@ -8,6 +8,8 @@ from app import db
 from app.db.utils import get_dataframe_from_query
 
 
+IP = '10.129.0.9'
+
 def app():
     st.markdown(
         """
@@ -31,7 +33,7 @@ def app():
             'completions': [],
             'predictions': [],
             'id': 1,
-            'data': {'image': f'http://localhost:5000/{selected_photo}'},
+            'data': {'image': f'http://{IP}:5000/{selected_photo}'},
         }
 
         results_raw = _get_labelstudio_labels(tasks)

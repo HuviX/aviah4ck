@@ -17,7 +17,7 @@ run: run-label
 	PYTHONPATH=. $(VENV)/bin/python -m streamlit run app/main.py
 
 run-label:
-	cd script && ../$(VENV)/bin/python -m flask run &
+	cd script && ../$(VENV)/bin/python -m flask run --host 10.129.0.9 &
 
 up:
 	docker-compose up app
