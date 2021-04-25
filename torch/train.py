@@ -76,7 +76,6 @@ if __name__ == '__main__':
     train_col = ['train'] * train_size + ['val'] * validation_size
     data['train'] = train_col
     train_df = data[data['train'] == 'train'].reset_index(drop=True)
-
     train_dataset = FruitImagesDataset(pic_dir,
                                     image_size,
                                     image_size,
@@ -87,6 +86,7 @@ if __name__ == '__main__':
         collate_fn=collate_fn)
     
     val_df = data[data['train'] == 'val'].reset_index(drop=True)
+    val_df.reset_index(drop=True).to_csv("validation.csv", index=False)
     val_dataset = FruitImagesDataset(pic_dir,
                                     image_size,
                                     image_size,
