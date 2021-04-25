@@ -183,7 +183,7 @@ def main(**kwargs):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     # How to: model initialization
     model = get_object_detection_model(3)
-    model.load_state_dict(torch.load(model_path)['model'])
+    model.load_state_dict(torch.load(model_path, map_location=device)['model'])
     model.eval()
     model.to(device)
 
