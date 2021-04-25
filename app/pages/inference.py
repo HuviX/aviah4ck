@@ -4,6 +4,7 @@ from sqlalchemy.orm import Query
 
 from app import db
 from app.db.utils import create_session, get_dataframe_from_query
+from app.model.inference import main
 
 
 def app():
@@ -52,9 +53,21 @@ def app():
                     .first()[0]
                 )
 
+        with open('temp.png', 'wb') as f:
+            f.write(photo.read())
+
         try:
-            pass
-            # TODO load model form path
+            kwargs = {
+                'path': 'temp.png',
+                'n_crops': 228,
+                'path_out': 'res.png',
+                'top_k': 3,
+                'type': 'window',  # or 'random'
+                'canny_crop': True,
+                'model_path': str(model_path)
+            }
+            main(**kwargs)
+            st.image('res.png')
 
         except:
-            pass
+            st.error('Ошибка')

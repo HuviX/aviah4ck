@@ -14,7 +14,6 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 from app.model import utils
 
-warnings.filterwarnings('ignore')
 
 
 def save_checkpoint(epoch, model, optimizer, checkpoint_path):

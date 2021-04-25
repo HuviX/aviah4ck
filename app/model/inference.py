@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 import warnings
@@ -17,9 +18,8 @@ from albumentations.pytorch.transforms import ToTensorV2
 from torchvision import transforms
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-warnings.filterwarnings('ignore')
 
-
+logger = logging.getLogger(__name__)
 
 # canny filter crop to remove background
 def crop_canny(img):
@@ -120,7 +120,7 @@ def random_window_prediction(
         ymin = box[1]
         xmax = box[2] + xmin
         ymax = box[3] + ymin
-        cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 2)
+        cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 4)
     return src_img
 
 
@@ -158,6 +158,7 @@ def sliding_window_prediction(
         scores = []
         for i, crop in crops.items():
             print(i, 'crop')
+            logger.error("crop %d", i)
             img = crop['image']
             img = test_time_transform(img).to(device)
             with torch.no_grad():
@@ -177,13 +178,13 @@ def sliding_window_prediction(
             ymin = box[1]
             xmax = box[2] + xmin
             ymax = box[3] + ymin
-            cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 2)
+            cv2.rectangle(crop, (xmin, ymin), (xmax, ymax), (255, 0, 0), 4)
         src_img[cy[0] : cy[1], cx[0] : cx[1]] = im
     return src_img
 
 
 def main(**kwargs):
-    os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     path = kwargs['path']
     n_crops = kwargs['n_crops']
     path_out = kwargs['path_out']
@@ -201,9 +202,9 @@ def main(**kwargs):
     model.to(device)
 
     if prediction_type == 'window':
-        res = sliding_window_prediction(model, path, canny_crop=canny_crop, k=3)
+        res = sliding_window_prediction(model, path, canny_crop=canny_crop, k=3, device=device)
     else:
-        res = random_window_prediction(model, path, n_crops, top_k)
+        res = random_window_prediction(model, path, n_crops, top_k, device=device)
     cv2.imwrite(path_out, res)
     print('Done')
 
